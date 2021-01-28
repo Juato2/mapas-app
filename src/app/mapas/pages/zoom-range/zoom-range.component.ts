@@ -28,10 +28,8 @@ export class ZoomRangeComponent implements AfterViewInit {
   // El símbolo "!" le dice a TypeScript que confíe en nosotros
   // que haremos las validaciones respectivas.
   @ViewChild('mapa') divMapa!: ElementRef;
-
-  // El símbolo "!" le dice a TypeScript que confíe en nosotros
-  // que haremos las validaciones respectivas.
   mapa!: mapboxgl.Map;
+  zoomLevel: number = 10;
 
   constructor() { }
 
@@ -41,16 +39,19 @@ export class ZoomRangeComponent implements AfterViewInit {
       container: this.divMapa.nativeElement,
       style: 'mapbox://styles/mapbox/streets-v11',
       center: [ -0.7484136607062297, 38.25670354590649 ],
-      zoom: 17
+      zoom: this.zoomLevel
     });
-  }
-
-  zoomIn() {
-    this.mapa.zoomIn();
   }
 
   zoomOut() {
     this.mapa.zoomOut();
+    this.zoomLevel = this.mapa.getZoom();
   }
+
+  zoomIn() {
+    this.mapa.zoomIn();
+    this.zoomLevel = this.mapa.getZoom();
+  }
+
 
 }
