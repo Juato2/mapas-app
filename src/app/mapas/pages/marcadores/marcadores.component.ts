@@ -3,7 +3,8 @@ import * as mapboxgl from 'mapbox-gl';
 
 interface MarcadorColor {
   color: string;
-  marker: mapboxgl.Marker;
+  marker?: mapboxgl.Marker;
+  centro?: [number, number];
 }
 
 @Component({
@@ -50,6 +51,8 @@ export class MarcadoresComponent implements AfterViewInit {
       zoom: this.zoomLevel,
     });
 
+    this.leerLocalStorage();
+
     // const markerHtml: HTMLElement = document.createElement('div');
     // markerHtml.innerHTML = 'Hola Mundo';
 
@@ -75,20 +78,51 @@ export class MarcadoresComponent implements AfterViewInit {
       .addTo(this.mapa);
 
     this.marcadores.push({ color, marker: nuevoMarcador });
+
+    this.guardarMarcadoresLocalStorage();
   }
 
   irMarcador(marker: mapboxgl.Marker): void {
     this.mapa.flyTo({
-      center: marker.getLngLat()
+      center: marker.getLngLat(),
     });
   }
 
   guardarMarcadoresLocalStorage() {
+    const lngLatArr: MarcadorColor[] = [];
 
+    this.marcadores.forEach((m) => {
+      const color = m.color;
+      // Ponemos el símbolo ! porque aunque en la Interfaz está
+      // declarado como opcional, en este punto sabemos que siempre
+      // existirá la propiedad marker
+      const { lng, lat } = m.marker!.getLngLat();
+      lngLatArr.push({
+        color,
+        centro: [lng, lat],
+      });
+    });
+
+    localStorage.setItem('marcadores', JSON.stringify(lngLatArr));
   }
 
-  leerLocalStorage() {
+  leerLocalStorage(): void {
+    if (!localStorage.getItem('marcadores')) {
+      return;
+    }
+    // Notar la presencia del ! que le indica que existe siempre
+    const lngLatArr: MarcadorColor[] = JSON.parse(
+      localStorage.getItem('marcadores')!
+    );
 
+    lngLatArr.forEach((m) => {
+      const newMarker = new mapboxgl.Marker({
+        color: m.color,
+        draggable: true,
+      })
+        .setLngLat(m.centro!)
+        .addTo(this.mapa);
+      this.marcadores.push({ color: m.color, marker: newMarker });
+    });
   }
-
 }
