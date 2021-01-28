@@ -103,3 +103,40 @@ CREATE src/app/shared/menu/menu.component.html (19 bytes)
 CREATE src/app/shared/menu/menu.component.ts (245 bytes)
 UPDATE src/app/app.module.ts (474 bytes)
 ```
+
+# GitHub
+
+## Estructura
+* Creamos un nuevo repositorio con el botón `new`:
+
+![Crendo el repositorio](./img/03_new_repo_github.jpeg "Creando el repositorio")
+
+## Propiedades
+* Configuramos sus propiedades:
+
+![Propiedades](./img/04_repo_propiedades.jpeg "Propiedades")
+
+## Comandos Git
+* Nos muestra los comandos que debemos de usar para empezar:
+
+![Comandos iniciales Git](./img/05_comandos_git.jpeg "Comandos iniciales Git")
+
+…or create a new repository on the command line
+
+```Shell
+echo "# mapas-app" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/Juato2/mapas-app.git
+git push -u origin main
+```
+
+…or push an existing repository from the command line
+
+```Shell
+git remote add origin https://github.com/Juato2/mapas-app.git
+git branch -M main
+git push -u origin main
+```
